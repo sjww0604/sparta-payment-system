@@ -17,11 +17,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Order {
+public class Order extends BaseTimeEntity {
 
 	@Id
 	@Column(name = "order_id", length = 255)
-	private String orderId;
+	private Long orderId;
 
 	@Column(name = "user_id", nullable = false)
 	private Long userId;
