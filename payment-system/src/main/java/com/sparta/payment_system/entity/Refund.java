@@ -35,8 +35,7 @@ public class Refund extends BaseTimeEntity {
 	@Column(name = "reason", columnDefinition = "TEXT")
 	private String reason;
 
-	public Refund(Long refundId, Payment payment, BigDecimal amount, String reason) {
-		this.refundId = refundId;
+	public Refund(Payment payment, BigDecimal amount, String reason) {
 		this.payment = payment;
 		this.amount = amount;
 		this.reason = reason;

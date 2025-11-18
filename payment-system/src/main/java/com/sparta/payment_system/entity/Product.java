@@ -34,8 +34,7 @@ public class Product extends BaseTimeEntity {
 	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 
-	public Product(Long productId, String name, BigDecimal price, Integer stock, String description) {
-		this.productId = productId;
+	public Product(String name, BigDecimal price, Integer stock, String description) {
 		this.name = name;
 		this.price = price;
 		this.stock = stock;

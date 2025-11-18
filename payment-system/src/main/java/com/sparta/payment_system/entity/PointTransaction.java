@@ -40,8 +40,7 @@ public class PointTransaction extends BaseTimeEntity {
 	@Column(name = "expires_at")
 	private LocalDateTime expiresAt;
 
-	public PointTransaction(Long transactionId, User user, Order order, Integer points, LocalDateTime expiresAt) {
-		this.transactionId = transactionId;
+	public PointTransaction(User user, Order order, Integer points, LocalDateTime expiresAt) {
 		this.user = user;
 		this.order = order;
 		this.points = points;
