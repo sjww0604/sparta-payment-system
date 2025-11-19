@@ -8,6 +8,7 @@ import com.sparta.payment_system.entity.User;
 import com.sparta.payment_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 회원가입 -> Bcrypt 사용안함
     public CreateUserResponse createUser(CreateUserRequest createUserRequest) {
@@ -28,6 +30,7 @@ public class AuthService {
                 createUserRequest.getUserName()
         );
 
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
         userRepository.save(user);
 
         return new CreateUserResponse(
@@ -46,7 +49,7 @@ public class AuthService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
 
         // hash 사용하고 matches 메소드로 변경 예정
-        if(user.getPasswordHash().equals(postLoginRequest.getPasswordHash())){
+        if(!passwordEncoder.matches(postLoginRequest.getPassword(), user.getPasswordHash())){
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
