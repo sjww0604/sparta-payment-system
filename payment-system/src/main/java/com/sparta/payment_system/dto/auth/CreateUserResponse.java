@@ -1,0 +1,24 @@
+package com.sparta.payment_system.dto.auth;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Getter
+@NoArgsConstructor
+public class CreateUserResponse {
+    private Long id;
+    private String email;
+    private String passwordHash;
+    private String name;
+    private LocalDateTime createdAt;
+
+    public CreateUserResponse(Long id, String email, String passwordHash, String name, LocalDateTime createdAt) {
+        this.id = id;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.name = name;
+        this.createdAt = createdAt;
+    }
+}
