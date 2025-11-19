@@ -24,7 +24,7 @@ public class Payment extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "payment_id")
+	@Column(name = "payment_id", unique = true)
 	private Long paymentId;
 
 	@OneToOne(fetch = FetchType.LAZY)
@@ -54,4 +54,9 @@ public class Payment extends BaseTimeEntity {
 		this.paymentMethod = paymentMethod;
 	}
 
+	public void completePayment(BigDecimal amount, String method) {
+		this.amount = amount;
+		this.status = PaymentStatus.PAID;
+		this.paymentMethod = method;
+	}
 }
