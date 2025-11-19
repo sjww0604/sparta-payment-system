@@ -2,6 +2,8 @@ package com.sparta.payment_system.controller;
 
 import com.sparta.payment_system.dto.auth.CreateUserRequest;
 import com.sparta.payment_system.dto.auth.CreateUserResponse;
+import com.sparta.payment_system.dto.auth.PostLoginRequest;
+import com.sparta.payment_system.dto.auth.PostLoginResponse;
 import com.sparta.payment_system.entity.User;
 import com.sparta.payment_system.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,9 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.createUser(createUserRequest));
     }
 
-
+    @PostMapping("/login")
+    public ResponseEntity<PostLoginResponse> loginUser(@RequestBody PostLoginRequest postLoginRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.userLogin(postLoginRequest));
+    }
 
 }
