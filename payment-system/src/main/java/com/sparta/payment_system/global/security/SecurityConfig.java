@@ -1,4 +1,4 @@
-package com.sparta.payment_system.config;
+package com.sparta.payment_system.global.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
