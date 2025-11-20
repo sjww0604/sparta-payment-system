@@ -11,7 +11,7 @@
     <div class="input-group">
         <label for="orderId">주문 ID</label>
         <input type="text" id="orderId" placeholder="order_id: 1">
-        <!-- 🔥 여기 추가: 주문 ID 적용 버튼 -->
+
         <button id="applyOrderBtn">적용</button>
     </div>
     <div class="input-group">
@@ -36,14 +36,13 @@
     </div>
 
     <div style="margin-top: 16px;">
-        <button onclick="alert('주문 조회 클릭')">주문 조회</button>
-        <button onclick="alert('결제 조회 클릭')">결제 조회</button>
+        <button id="getOrdersBtn">주문 조회</button>
+        <button id="getPaymentsBtn">결제 조회</button>
         <button id="paymentBtn">결제하기</button>
     </div>
 
 </div>
 
-<!-- 서버에서 전달한 변수들을 JS로 안전하게 전달 -->
 <script th:inline="javascript">
 
     const STORE_ID = [[${storeId}]];       // 서버에서 model.addAttribute로 전달한 storeId
@@ -57,17 +56,20 @@
 
 <script>
 
+    const API_BASE_URL = "http://localhost:8080";  //api 공통 시작부
+
+
     //dom Element 객체 반환
     const totalAmountInput = document.getElementById('totalAmount');
     const pointsInput = document.getElementById('points');
     const finalAmountDisplay = document.getElementById('finalAmount');
     const formulaDisplay = document.getElementById('formula');
+    const getOrdersBtn = document.getElementById('getOrdersBtn');
+    const getPaymentsBtn = document.getElementById('getPaymentsBtn');
     const paymentBtn = document.getElementById('paymentBtn');
-
-    // 🔥 추가: 주문 적용 버튼 DOM
     const applyOrderBtn = document.getElementById('applyOrderBtn');
 
-    // 🔥 주문 적용 버튼 이벤트
+    // 주문 적용 버튼 이벤트 처리 메서드
     applyOrderBtn.addEventListener('click', async function () {
         const orderId = document.getElementById('orderId').value;
 
@@ -79,21 +81,39 @@
         try {
             // 🔹 fetch API URL 변경: /api/orders/{orderId}
             console.log(orderId)
-            const res = await fetch(`http://localhost:8080/api/orders/${orderId}`);
+            const res = await fetch(`${API_BASE_URL}/api/orders/${orderId}`);
             if (!res.ok) {
-                alert("주문 정보를 불러올 수 없습니다.");
+                alert("orderId 를 불러올 수 없습니다.");
                 return;
             }
 
             const data = await res.json();
 
-            // 🔥 성공 시 총금액 input 자동 세팅
+            //  성공 시 총금액 input 자동 세팅
             totalAmountInput.value = data.totalAmount || 0;
 
-            // 🔥 최종 결제 금액 계산
+            //  최종 결제 금액 계산
             calculateFinalAmount();
 
             alert("주문 정보가 적용되었습니다.");
+
+        } catch (e) {
+            console.error(e);
+            alert("서버 요청 중 오류 발생");
+        }
+    });
+
+    //주문 조회 버튼 이밴트 처리 메서드
+    getOrdersBtn.addEventListener('click', async function () {
+
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/orders`);
+            if (!res.ok) {
+                alert("주문 리스트 를 불러올 수 없습니다.");
+                return;
+            }
+
+            alert("주문 리스트가 조회됨");
 
         } catch (e) {
             console.error(e);
