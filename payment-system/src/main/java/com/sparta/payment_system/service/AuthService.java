@@ -5,8 +5,8 @@ import com.sparta.payment_system.dto.auth.CreateUserResponse;
 import com.sparta.payment_system.dto.auth.PostLoginRequest;
 import com.sparta.payment_system.dto.auth.PostLoginResponse;
 import com.sparta.payment_system.entity.User;
+import com.sparta.payment_system.global.jwt.JwtUtils;
 import com.sparta.payment_system.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
 
     // 회원가입 -> Bcrypt 사용안함
     public CreateUserResponse createUser(CreateUserRequest createUserRequest) {
@@ -48,14 +49,23 @@ public class AuthService {
         User user = userRepository.findByEmail(postLoginRequest.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
 
-        // hash 사용하고 matches 메소드로 변경 예정
         if(!passwordEncoder.matches(postLoginRequest.getPassword(), user.getPasswordHash())){
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
+        String accessToken = jwtUtils.createAccessToken(
+                user.getUserId(),
+                user.getEmail(),
+                user.getName()
+        );
+
+        String refreshToken = jwtUtils.createRefreshToken(user.getUserId());
+
         return new PostLoginResponse(
                 user.getUserId(),
-                user.getName()
+                user.getName(),
+                accessToken,
+                refreshToken
         );
     }
 

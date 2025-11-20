@@ -8,14 +8,13 @@ import lombok.NoArgsConstructor;
 public class PostLoginResponse {
     private Long userId;
     private String userName;
+    private String accessToken;
+    private String refreshToken;
 
-    // 시큐리티 추가시 토큰 발행
-    //private String accessToken;
-    //private String refreshToken;
-
-
-    public PostLoginResponse(Long userId, String userName) {
+    public PostLoginResponse(Long userId, String userName, String accessToken, String refreshToken) {
         this.userId = userId;
         this.userName = userName;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 }
