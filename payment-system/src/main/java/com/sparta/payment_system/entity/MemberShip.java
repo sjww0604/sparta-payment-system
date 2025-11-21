@@ -32,7 +32,7 @@ public class MemberShip extends BaseTimeEntity {
 
 	//회원
 	@Enumerated(EnumType.STRING)
-	Grade point;
+	Grade grade;
 
 	@Column(name = "expires_at")
 	private LocalDateTime expiresAt;
