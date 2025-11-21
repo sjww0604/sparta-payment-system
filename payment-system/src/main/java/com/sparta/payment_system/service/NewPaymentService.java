@@ -5,18 +5,16 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sparta.payment_system.client.PortOneClient;
 import com.sparta.payment_system.entity.Order;
 import com.sparta.payment_system.entity.OrderStatus;
 import com.sparta.payment_system.entity.Payment;
 import com.sparta.payment_system.entity.PaymentStatus;
-import com.sparta.payment_system.entity.PointTransaction;
 import com.sparta.payment_system.repository.OrderRepository;
 import com.sparta.payment_system.repository.PaymentRepository;
-import com.sparta.payment_system.repository.ProductRepository;
 import com.sparta.payment_system.repository.RefundRepository;
-import com.sparta.payment_system.repository.UserRepository;
 
 import reactor.core.publisher.Mono;
 
@@ -29,21 +27,22 @@ public class NewPaymentService {
 	private final OrderRepository orderRepository;
 
 	// 후처리 과정에 필요한 요소
-	private final PointTransaction pointTransaction; // 레포지토리 만들어야 할까?
-	private final ProductRepository productRepository;
-	private final UserRepository userRepository;
+	private final ProductService productService;
+	private final PointService pointService;
+	private final MemberShipService memberShipService;
 
 	@Autowired
 	public NewPaymentService(PortOneClient portOneClient, PaymentRepository paymentRepository,
-		RefundRepository refundRepository, OrderRepository orderRepository, PointTransaction pointTransaction,
-		ProductRepository productRepository, UserRepository userRepository) {
+		RefundRepository refundRepository, OrderRepository orderRepository, ProductService productService,
+		PointService pointService, MemberShipService memberShipService) {
 		this.portOneClient = portOneClient;
 		this.paymentRepository = paymentRepository;
 		this.refundRepository = refundRepository;
 		this.orderRepository = orderRepository;
-		this.pointTransaction = pointTransaction;
-		this.productRepository = productRepository;
-		this.userRepository = userRepository;
+		this.productService = productService;
+		this.pointService = pointService;
+		this.memberShipService = memberShipService;
+
 	}
 
 	// 결제건 검증
@@ -156,21 +155,8 @@ public class NewPaymentService {
 		return null;
 	}
 
-	// 후처리 기능 구현 (재고 차감, 포인트 적립, 누적금액 확인 후 등급 업데이트) +. 사용자별 누적금액 처리하는 엔티티가 있나? ? ? ? ? ?
-	private void updateAfterPayment(Order order,
-		Payment payment,
-		BigDecimal paidAmount,
-		Map<String, Object> paymentDetails) {
-		//1. 재고 차감
-		// >> order로 수량을 찾는게 아니고 orderitem에서 찾아야 함 (11/20 개선 필요)
-
-		//2. 포인트 적립
-
-		//3. 누적금액 확인 후 등급 업데이트
-
-	}
-
 	// 결제 검증 통과 후 Order / Payment 갱신
+	@Transactional
 	private void updateOrderAndPayment(Long orderId,
 		String impUid,
 		BigDecimal paidAmount,
@@ -199,10 +185,11 @@ public class NewPaymentService {
 
 			// 2-2. 결제 완료 처리 (Entity 메서드 사용 -> 외부 검증에 문제가 없었으므로 내부 상태를 PAID로 설정)
 			payment.completePayment(paidAmount, method);
-
 			paymentRepository.save(payment);
 
-			// 3. 주문 상태 갱신 (후처리 이후 갱신이 필요한 것 아닌가??)
+			// 성공시 후처리 기능 호출
+			updateAfterPayment(order, payment, paidAmount, paymentDetails);
+
 			order.updateOrderStatus(OrderStatus.COMPLETED);
 			orderRepository.save(order);
 
@@ -211,6 +198,27 @@ public class NewPaymentService {
 			System.err.println("결제/주문 상태 갱신 중 오류 발생: " + e.getMessage());
 			e.printStackTrace();
 		}
+	}
+
+	// 결제 성공 후 후처리 (재고 차감, 포인트 적립, 누적금액 확인 후 등급 업데이트)
+	private void updateAfterPayment(Order order,
+		Payment payment,
+		BigDecimal paidAmount,
+		Map<String, Object> paymentDetails) {
+		if (order == null || order.getOrderId() == null) {
+			return;
+		}
+
+		Long orderId = order.getOrderId();
+
+		// 1. 재고 차감: 주문에 포함된 상품 재고를 감소
+		productService.decreaseStockForOrder(orderId);
+
+		// 2. 포인트 적립: 결제 금액/주문 정보를 기준으로 포인트 적립
+		pointService.earnPointsAfterPayment(order, paidAmount);
+
+		// 3. 멤버십 등급 업데이트: 최근 90일 기준 누적 금액으로 등급 재계산
+		memberShipService.updateMemberShipByOrder(orderId);
 	}
 
 	// 결제 취소 후 DB 수정 헬퍼 메서드
@@ -229,8 +237,8 @@ public class NewPaymentService {
 		payment.updatePaymentStatus(PaymentStatus.REFUNDED);
 		paymentRepository.save(payment);
 
-		// TODO: Refund 엔티티/포인트/재고 롤백 등 추가 후처리 구현
-		// 3.5 역으로 진행이 필요한 후처리 필요 (재고 원복, 멤버십 재조정, 포인트 원복)
+		// 취소시 후처리 기능 호출
+		rollbackAfterCancel(payment, cancelAmount);
 
 		// 4. 연관 주문 상태를 CANCELLED 로 변경
 		Order order = payment.getOrder();
@@ -240,5 +248,24 @@ public class NewPaymentService {
 		}
 
 		System.out.println("결제 취소 후 DB 상태 갱신 완료 - impUid=" + impUid + ", cancelAmount=" + cancelAmount);
+	}
+
+	// 결제 취소 후 후처리 (재고 원복, 포인트 원복, 멤버십 등급 재계산)
+	private void rollbackAfterCancel(Payment payment, BigDecimal cancelAmount) {
+		Order order = payment.getOrder();
+		if (order == null || order.getOrderId() == null) {
+			return;
+		}
+
+		Long orderId = order.getOrderId();
+
+		// 1. 재고 원복
+		productService.rollbackStockForOrder(orderId);
+
+		// 2. 포인트 원복
+		pointService.rollbackPointsAfterCancel(order);
+
+		// 3. 멤버십 등급 재계산 (최근 90일 기준으로 다시 계산)
+		memberShipService.updateMemberShipByOrder(orderId);
 	}
 }
