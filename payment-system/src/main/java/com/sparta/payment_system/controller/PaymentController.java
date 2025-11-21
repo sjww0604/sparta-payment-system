@@ -8,11 +8,13 @@
 // import org.springframework.http.ResponseEntity;
 // import org.springframework.web.bind.annotation.CrossOrigin;
 // import org.springframework.web.bind.annotation.GetMapping;
+// import org.springframework.web.bind.annotation.PathVariable;
 // import org.springframework.web.bind.annotation.PostMapping;
 // import org.springframework.web.bind.annotation.RequestBody;
 // import org.springframework.web.bind.annotation.RequestMapping;
 // import org.springframework.web.bind.annotation.RestController;
 //
+// import com.sparta.payment_system.entity.Order;
 // import com.sparta.payment_system.entity.Payment;
 // import com.sparta.payment_system.entity.PaymentStatus;
 // import com.sparta.payment_system.repository.OrderItemRepository;
@@ -49,7 +51,7 @@
 //
 // 	// 결제 완료 검증 API
 // 	@PostMapping("/complete")
-// 	public Mono<ResponseEntity<String>> completePayment(@RequestBody Map<String, String> request) {
+// 	public Mono<ResponseEntity<String>> completePayment(@RequestBody Map<String, String> request) { // dto로 변환해서 구현해볼 것
 // 		String paymentId = request.get("paymentId");
 // 		System.out.println("결제 완료 검증 요청 받음 - Payment ID: " + paymentId);
 //
@@ -66,10 +68,10 @@
 // 	// 결제 취소 API
 // 	@PostMapping("/cancel")
 // 	public Mono<ResponseEntity<String>> cancelPaymentByPaymentId(@RequestBody Map<String, String> request) {
-// 		Long paymentId = request.get("paymentId");
+// 		String paymentId = request.get("paymentId");
 // 		String reason = request.getOrDefault("reason", "사용자 요청에 의한 취소");
 //
-// 		return paymentService.cancelsPayment(paymentId, reason)
+// 		return paymentService.cancelPayment(paymentId, reason)
 // 			.map(isSuccess -> {
 // 				if (isSuccess) {
 // 					return ResponseEntity.ok("Payment cancellation successful.");
@@ -92,25 +94,23 @@
 // 		}
 // 	}
 //
-// 	// // 특정 사용자의 PAID 결제 목록 조회
-// 	// @GetMapping("/paid/user/{userId}")
-// 	// public ResponseEntity<List<Payment>> getPaidPaymentsByUser(@PathVariable Long userId) {
-// 	// 	try {
-// 	// 		// 주문을 통해 사용자별 결제 조회
-// 	// 		List<Order> userOrders = orderRepository.findByUserId(userId);
-// 	// 		List<Long> orderIds = userOrders.stream()
-// 	// 			.map(Order::getOrderId)
-// 	// 			.toList();
-// 	//
-// 	// 		List<Payment> paidPayments = paymentRepository.findByOrderIdInAndStatus(orderIds,
-// 	// 			PaymentStatus.PAID);
-// 	// 		return ResponseEntity.ok(paidPayments);
-// 	// 	} catch (Exception e) {
-// 	// 		System.err.println("사용자별 PAID 결제 목록 조회 오류: " + e.getMessage());
-// 	// 		e.printStackTrace();
-// 	// 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-// 	// 	}
-// 	// }
+// 	// 특정 사용자의 PAID 결제 목록 조회
+// 	@GetMapping("/paid/user/{userId}")
+// 	public ResponseEntity<List<Payment>> getPaidPaymentsByUser(@PathVariable Long userId) {
+// 		try {
+// 			// 주문을 통해 사용자별 결제 조회
+// 			List<Order> userOrders = orderRepository.findByUserId(userId);
+// 			List<Long> orderIds = userOrders.stream()
+// 				.map(Order::getOrderId)
+// 				.toList();
+//
+// 			List<Payment> paidPayments = paymentRepository.findByOrderIdInAndStatus(orderIds,
+// 				PaymentStatus.PAID);
+// 			return ResponseEntity.ok(paidPayments);
+// 		} catch (Exception e) {
+// 			System.err.println("사용자별 PAID 결제 목록 조회 오류: " + e.getMessage());
+// 			e.printStackTrace();
+// 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+// 		}
+// 	}
 // }
-//
-//

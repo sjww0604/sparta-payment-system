@@ -36,7 +36,7 @@
 // 		this.orderRepository = orderRepository;
 // 	}
 //
-// 	public Mono<Boolean> verifyPayment(Long paymentId) {
+// 	public Mono<Boolean> verifyPayment(String paymentId) {
 // 		return portoneClient.getAccessToken()
 // 			.flatMap(accessToken -> portoneClient.getPaymentDetails(paymentId, accessToken))
 // 			.map(paymentDetails -> {
@@ -60,7 +60,6 @@
 // 						try {
 // 							paidAmount = Integer.parseInt((String)totalObj);
 // 						} catch (NumberFormatException ignored) {
-//
 // 						}
 // 					}
 // 				}
@@ -161,7 +160,7 @@
 // 			System.out.println("입력 파라미터 - paymentId: " + paymentId + ", orderId: " + orderId + ", amount: " + amount);
 //
 // 			// 주문이 존재하는지 먼저 확인
-// 			Optional<Order> orderOptional = orderRepository.findById(orderId);
+// 			Optional<Order> orderOptional = orderRepository.findByOrderId(orderId);
 // 			if (orderOptional.isEmpty()) {
 // 				System.out.println("주문을 찾을 수 없습니다. 자동으로 주문을 생성합니다. Order ID: " + orderId);
 //
@@ -232,7 +231,7 @@
 // 		}
 // 	}
 //
-// 	public Mono<Boolean> cancelPayment(Long paymentId, String reason) {
+// 	public Mono<Boolean> cancelPayment(String paymentId, String reason) {
 // 		return portoneClient.getAccessToken()
 // 			.flatMap(accessToken ->
 // 				// 1) 먼저 결제 상세 조회로 PortOne의 공식 결제 ID를 확인한다

@@ -29,7 +29,11 @@ public class User extends BaseTimeEntity {
 	@Column(name = "name")
 	private String name;
 
-	public User(String email, String passwordHash, String name) {
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public User(String email, String passwordHash, String name) {
 		this.email = email;
 		this.passwordHash = passwordHash;
 		this.name = name;
