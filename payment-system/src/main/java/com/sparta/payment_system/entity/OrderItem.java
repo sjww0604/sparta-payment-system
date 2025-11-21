@@ -44,11 +44,19 @@ public class OrderItem {
 	private BigDecimal totalPrice;
 
 	@Builder
-	public OrderItem(Order order, Product product, Integer quantity, BigDecimal price,  BigDecimal totalPrice) {
+	public OrderItem(Order order, Product product, Integer quantity, BigDecimal price, BigDecimal totalPrice) {
 		this.order = order;
 		this.product = product;
 		this.quantity = quantity;
 		this.price = price;
 		this.totalPrice = totalPrice;
+	}
+
+	public void decreaseProductStock() {
+		product.decreaseStock(quantity);
+	}
+
+	public void rollbackProductStock() {
+		product.rollbackStock(quantity);
 	}
 }
