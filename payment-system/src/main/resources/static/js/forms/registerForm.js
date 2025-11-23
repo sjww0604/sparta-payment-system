@@ -17,6 +17,12 @@ registerButton.addEventListener('click',async function () {
         return;
     }
 
+    // 이메일 검증 추가
+    if (!validateEmail(email)) {
+        alert("올바른 이메일 형식이 아닙니다.");
+        return;
+    }
+
     if (password.length < 6) {
         alert("비밀번호는 6 자 이상이어야 합니다")
         return;
@@ -46,3 +52,8 @@ registerButton.addEventListener('click',async function () {
         registerButton.textContent = '회원가입';
     }
 });
+
+function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
