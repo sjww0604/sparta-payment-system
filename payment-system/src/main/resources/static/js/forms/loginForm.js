@@ -1,4 +1,5 @@
 
+
 const API_BASE_URL = "http://localhost:8080";  //api 공통 시작부
 
 //dom Element 객체 반환
@@ -21,6 +22,7 @@ function removeAuthToken() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userId');
+    console.log("localStorage clear")
 }
 
 // 로그인 처리
@@ -49,7 +51,7 @@ loginBtn.addEventListener('click', async function () {
                 alert("로그인에 실패 했습니다.");
                 return
             }
-
+            removeAuthToken()  //이전에 있던 localStorage 의 토큰 지우기
             setAuthToken(data);
             console.log(data.userId, data.email, data.name);
             alert("로그인 성공");
@@ -75,3 +77,4 @@ async function LoginSuccess()  {
     }
 }
 //로그인 실패시 호출하는 메서드
+// 미 구현
