@@ -198,19 +198,21 @@ paymentBtn.addEventListener('click', async function (e) {
     }
 
     // 결제 검증
-    async function verifyPayment(paymentId) {
+    async function verifyPayment(orderId, paymentId, final) {
         // 결제 검증 엔드포인트 호출
         const response = await fetch(`${API_BASE_URL}/api/payments/complete`, {
             method: 'POST',
             headers: createAuthHeaders(),
             body: JSON.stringify({
-                paymentId: paymentId
-            })
+                orderId: orderId,
+                impUid: paymentId,
+                amount: final
+            }) //requestBody 형식 - VerifyPaymentRequest  dto 형식 orderId, impUid, amount 과 매칭
         });
         const resultText = await response.text();
 
         if (!response.ok) {
-            throw new Error("결제 검증 중 예상치 못한 오류 발생!");
+            alert("결제 검증 중 예상치 못한 오류 발생 ( error message : ${resultText})");
         }
     }
 });
