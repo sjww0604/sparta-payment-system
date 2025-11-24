@@ -51,7 +51,7 @@
 //
 // 	// 결제 완료 검증 API
 // 	@PostMapping("/complete")
-// 	public Mono<ResponseEntity<String>> completePayment(@RequestBody Map<String, String> request) {
+// 	public Mono<ResponseEntity<String>> completePayment(@RequestBody Map<String, String> request) { // dto로 변환해서 구현해볼 것
 // 		String paymentId = request.get("paymentId");
 // 		System.out.println("결제 완료 검증 요청 받음 - Payment ID: " + paymentId);
 //
@@ -68,7 +68,7 @@
 // 	// 결제 취소 API
 // 	@PostMapping("/cancel")
 // 	public Mono<ResponseEntity<String>> cancelPaymentByPaymentId(@RequestBody Map<String, String> request) {
-// 		Long paymentId = request.get("paymentId");
+// 		String paymentId = request.get("paymentId");
 // 		String reason = request.getOrDefault("reason", "사용자 요청에 의한 취소");
 //
 // 		return paymentService.cancelPayment(paymentId, reason)

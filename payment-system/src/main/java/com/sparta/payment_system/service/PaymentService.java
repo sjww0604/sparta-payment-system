@@ -36,7 +36,7 @@
 // 		this.orderRepository = orderRepository;
 // 	}
 //
-// 	public Mono<Boolean> verifyPayment(Long paymentId) {
+// 	public Mono<Boolean> verifyPayment(String paymentId) {
 // 		return portoneClient.getAccessToken()
 // 			.flatMap(accessToken -> portoneClient.getPaymentDetails(paymentId, accessToken))
 // 			.map(paymentDetails -> {
@@ -231,7 +231,7 @@
 // 		}
 // 	}
 //
-// 	public Mono<Boolean> cancelPayment(Long paymentId, String reason) {
+// 	public Mono<Boolean> cancelPayment(String paymentId, String reason) {
 // 		return portoneClient.getAccessToken()
 // 			.flatMap(accessToken ->
 // 				// 1) 먼저 결제 상세 조회로 PortOne의 공식 결제 ID를 확인한다
