@@ -186,6 +186,8 @@ paymentBtn.addEventListener('click', async function (e) {
         }
     });
 
+    console.log("결제 응답 전체:", JSON.stringify(response, null, 2));
+
     // 결제가 실패하는 경우
     if (response.code != null) {
         console.error("결제 실패", response);
@@ -199,14 +201,14 @@ paymentBtn.addEventListener('click', async function (e) {
         sessionStorage.setItem('pendingPaymentId', response.paymentId);
         sessionStorage.setItem('pendingOrderId', orderId);
         console.log('결제 정보를 sessionStorage에 저장:', {
-            paymentId: paymentResponse.paymentId,
+            paymentId: response.paymentId,
             orderId: orderId
         });
     }
-
+    console.log("결제 검증 로직 호출")
     //결제 검증 로직
     try{
-        await verifyPayment(response.paymentId); // 백엔드로 결제 검증 요청 메서드 호출
+        await verifyPayment(orderId, response.paymentId, final); // 백엔드로 결제 검증 요청 메서드 호출
         // 검증 성공 시 sessionStorage에서 제거
         sessionStorage.removeItem('pendingPaymentId');
         sessionStorage.removeItem('pendingOrderId');
@@ -222,6 +224,7 @@ paymentBtn.addEventListener('click', async function (e) {
     // 결제 검증
     async function verifyPayment(orderId, paymentId, final) {
         // 결제 검증 엔드포인트 호출
+        console.log("결제 검증 메서드 시작")
         const response = await fetch(`${API_BASE_URL}/api/payments/complete`, {
             method: 'POST',
             headers: createAuthHeaders(),
@@ -233,9 +236,11 @@ paymentBtn.addEventListener('click', async function (e) {
         });
         const resultText = await response.text();
 
-        if (!response.ok) {
-            alert("결제 검증 중 예상치 못한 오류 발생 ( error message : ${resultText})");
-        }
+        // if (!response.ok) {
+        //     alert("결제 검증 중 예상치 못한 오류 발생 ( error message : ${resultText})");
+        // }
+
+
     }
 });
 

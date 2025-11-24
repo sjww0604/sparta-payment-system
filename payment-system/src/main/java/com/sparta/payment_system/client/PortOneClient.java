@@ -13,11 +13,14 @@ public class PortOneClient {
 
 	private final WebClient webClient;
 	private final String apiSecret;
+	private final String storeId;
 
 	public PortOneClient(@Value("${portone.api.url}") String apiUrl,
-		@Value("${portone.api.secret}") String apiSecret) {
+		@Value("${portone.api.secret}") String apiSecret,
+		@Value("${portone.store.id}") String storeId){
 		this.webClient = WebClient.create(apiUrl); // WebClient로 인해서 Mono 는 필수
 		this.apiSecret = apiSecret;
+		this.storeId = storeId;
 	}
 
 	// API Secret으로 인증 토큰 요청
@@ -27,16 +30,29 @@ public class PortOneClient {
 			.bodyValue(Map.of("apiSecret", apiSecret))
 			.retrieve()
 			.bodyToMono(Map.class)
-			.map(response -> (String)response.get("accessToken"));
+			.map(response -> (String)response.get("accessToken"))
+			.onErrorResume(e -> {
+				System.err.println("PortOne token fetch error: " + e.getMessage());
+				return Mono.empty();
+			});
 	}
 
 	// 결제 ID로 결제 정보 조회
 	public Mono<Map> getPaymentDetails(String impUid, String accessToken) {
+
+		System.out.println("PortOneClient.getPaymentDetails 호츨");
+		System.out.println("impUid = " + impUid);
+		System.out.println("accessToken = " + accessToken);
 		return webClient.get()
-			.uri("/payments/{impUid}", impUid)
+			.uri("/payments/{impUid}?storeId={storeId}", impUid, storeId)
 			.header("Authorization", "Bearer " + accessToken)
 			.retrieve()
-			.bodyToMono(Map.class);
+			.bodyToMono(Map.class)
+			.doOnNext(pd -> System.out.println("결제 조회 응답: " + pd))
+			.doOnError(e -> {
+				System.err.println("getPaymentDetails 에러: " + e.getMessage());
+				e.printStackTrace();
+			});
 	}
 
 	// 결제 취소
