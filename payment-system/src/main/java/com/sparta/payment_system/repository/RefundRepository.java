@@ -10,7 +10,7 @@ import com.sparta.payment_system.entity.Refund;
 @Repository
 public interface RefundRepository extends JpaRepository<Refund, Long> {
 
-	List<Refund> findByPaymentId(Long paymentId);
+	//List<Refund> findByPaymentId(Long paymentId);
 
 	// List<Refund> findByStatus(Refund.RefundStatus status);
 }
