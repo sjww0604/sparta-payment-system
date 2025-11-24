@@ -5,6 +5,7 @@ const API_BASE_URL = "http://localhost:8080";  //api 공통 시작부
 //dom Element 객체 반환
 const totalAmountInput = document.getElementById('totalAmount');
 const pointsInput = document.getElementById('points');
+const userPoint = document.getElementById('userPoint');
 const finalAmountDisplay = document.getElementById('finalAmount');
 const formulaDisplay = document.getElementById('formula');
 const getOrdersBtn = document.getElementById('getOrdersBtn');
@@ -20,7 +21,7 @@ applyOrderBtn.addEventListener('click', async function () {
         alert("주문 ID를 입력하세요.");
         return;
     }
-
+    // 1. order 단건 조회로 총 금액 가지고 오기
     try {
         const res = await fetch(`${API_BASE_URL}/api/orders/${orderId}`, {
             method: "GET",
@@ -36,10 +37,31 @@ applyOrderBtn.addEventListener('click', async function () {
         //  성공 시 총금액 input 자동 세팅
         totalAmountInput.value = data.totalAmount || 0;
 
+
+    } catch (e) {
+        console.error(e);
+        alert("서버 요청 중 오류 발생");
+    }
+    //2. user_id 로 보유 포인트 가지고 오기
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/points`, {
+            method: "GET",
+            headers: createAuthHeaders(),
+        });
+        if (!res.ok) {
+            alert("userId 로 포인트를 불러올 수 없습니다.");
+            return;
+        }
+
+        const data = await res.json();
+
+        //  성공 시 총금액 input 자동 세팅
+        userPoint.value = data.points || 0;
+
         //  최종 결제 금액 계산
         calculateFinalAmount();
 
-        alert("주문 정보가 적용되었습니다.");
+        alert("주문 정보와 포인트가 적욛 되었습니다.");
 
     } catch (e) {
         console.error(e);
