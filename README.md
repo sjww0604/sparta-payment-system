@@ -39,6 +39,14 @@
 
 ---
 
+## 비즈니스 로직 플로우차트
+
+![payment-system-flowchart.png](payment-system-flowchart.png)
+
+## ERD 설계
+
+![ERD.png](ERD.png)
+
 ## 📁 프로젝트 디렉토리 구조
 
 ```
