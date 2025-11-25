@@ -17,7 +17,7 @@ public class PortOneClient {
 
 	public PortOneClient(@Value("${portone.api.url}") String apiUrl,
 		@Value("${portone.api.secret}") String apiSecret,
-		@Value("${portone.store.id}") String storeId){
+		@Value("store-26aa9b80-8368-41c6-b05a-31b92973ec4e") String storeId) {
 		this.webClient = WebClient.create(apiUrl); // WebClient로 인해서 Mono 는 필수
 		this.apiSecret = apiSecret;
 		this.storeId = storeId;
