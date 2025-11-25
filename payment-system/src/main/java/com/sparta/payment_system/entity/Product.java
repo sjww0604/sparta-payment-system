@@ -41,4 +41,23 @@ public class Product extends BaseTimeEntity {
 		this.description = description;
 	}
 
+	// 재고 차감
+	public void decreaseStock(int quantity) {
+		if (quantity <= 0) {
+			throw new IllegalArgumentException("차감 수량은 1 이상이어야 합니다.");
+		}
+		if (this.stock < quantity) {
+			throw new IllegalStateException("상품 재고가 부족합니다. (현재 재고 = " + stock + ")");
+		}
+		this.stock -= quantity;
+	}
+
+	// 재고 원복
+	public void rollbackStock(int quantity) {
+		if (quantity <= 0) {
+			throw new IllegalArgumentException("원복 수량은 1 이상이어야 합니다.");
+		}
+		this.stock += quantity;
+	}
+
 }

@@ -16,7 +16,7 @@ public class PortOneClient {
 
 	public PortOneClient(@Value("${portone.api.url}") String apiUrl,
 		@Value("${portone.api.secret}") String apiSecret) {
-		this.webClient = WebClient.create(apiUrl);
+		this.webClient = WebClient.create(apiUrl); // WebClient로 인해서 Mono 는 필수
 		this.apiSecret = apiSecret;
 	}
 
@@ -31,18 +31,18 @@ public class PortOneClient {
 	}
 
 	// 결제 ID로 결제 정보 조회
-	public Mono<Map> getPaymentDetails(Long paymentId, String accessToken) {
+	public Mono<Map> getPaymentDetails(String impUid, String accessToken) {
 		return webClient.get()
-			.uri("/payments/{paymentId}", paymentId)
+			.uri("/payments/{impUid}", impUid)
 			.header("Authorization", "Bearer " + accessToken)
 			.retrieve()
 			.bodyToMono(Map.class);
 	}
 
 	// 결제 취소
-	public Mono<Map> cancelPayment(String paymentId, String accessToken, String reason) {
+	public Mono<Map> cancelPayment(String impUid, String accessToken, String reason) {
 		return webClient.post()
-			.uri("/payments/{paymentId}/cancel", paymentId)
+			.uri("/payments/{impUid}/cancel", impUid)
 			.header("Authorization", "Bearer " + accessToken)
 			.bodyValue(Map.of("reason", reason))
 			.retrieve()

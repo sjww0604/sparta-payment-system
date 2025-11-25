@@ -1,6 +1,7 @@
 package com.sparta.payment_system.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,7 +25,7 @@ public class Payment extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "payment_id")
+	@Column(name = "payment_id", unique = true)
 	private Long paymentId;
 
 	@OneToOne(fetch = FetchType.LAZY)
@@ -46,12 +47,25 @@ public class Payment extends BaseTimeEntity {
 	@Column(name = "payment_method", length = 100)
 	private String paymentMethod;
 
+	@Column(name = "paid_at")
+	private LocalDateTime paidAt;
+
 	public Payment(Order order, BigDecimal amount, String impUid, PaymentStatus status, String paymentMethod) {
 		this.order = order;
 		this.amount = amount;
 		this.impUid = impUid;
 		this.status = status;
 		this.paymentMethod = paymentMethod;
+	}
+
+	public void completePayment(BigDecimal amount, String method) {
+		this.amount = amount;
+		this.status = PaymentStatus.PAID;
+		this.paymentMethod = method;
+	}
+
+	public void updatePaymentStatus(PaymentStatus status) {
+		this.status = status;
 	}
 
 }
