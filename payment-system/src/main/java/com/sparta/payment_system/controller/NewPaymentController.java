@@ -17,8 +17,10 @@ import com.sparta.payment_system.dto.payment.VerifyPaymentRequest;
 import com.sparta.payment_system.service.NewPaymentService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/payments")
 @RequiredArgsConstructor
@@ -27,36 +29,40 @@ public class NewPaymentController {
 
 	// 결제 완료 검증
 	@PostMapping("/complete")
-	public Mono<ResponseEntity<String>> completePayment(
-		@RequestBody VerifyPaymentRequest request
-	) {
+	public Mono<ResponseEntity<String>> completePayment(@RequestBody VerifyPaymentRequest request) {
+		log.info("엔드 포인트 호출 성공");
 		Long orderId = request.getOrderId();
 		String impUid = request.getImpUid();
 		BigDecimal amount = request.getAmount();
 
 		return newPaymentService.verifyPayment(impUid, orderId, amount)
-			.map(isSuccess -> {
-				if (isSuccess) {
-					return ResponseEntity.status(HttpStatus.OK).body("결제 검증 및 완료 처리 성공");
-				} else {
-					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("결제 검증 실패");
-				}
+			.doOnNext(result -> log.info("verifyPayment 결과: {}", result))
+			.map(result -> {
+				if (result)
+					return ResponseEntity.ok("Payment Verified");
+				else
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment Verification Failed");
+			})
+			.onErrorResume(e -> {
+				log.error("결제 검증 중 예외 발생", e);
+				return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage()));
 			});
 	}
 
 	// 결제 취소
-	// 사용자가 직접 취소하는게 아니라 관리자가 사용자의 요청을 받고 취소해주는 단계
 	@PostMapping("/cancel")
-	public Mono<ResponseEntity<String>> cancelPayment(
-		@RequestBody CancelPaymentRequest cancelRequest
-	) {
-		String impUid = cancelRequest.getImpUId();
-		String reason = cancelRequest.getReason() != null ? cancelRequest.getReason() : "사용자에 의한 요청 취소";
+	public Mono<ResponseEntity<String>> cancelPayment(@RequestBody CancelPaymentRequest cancelRequest) {
+		String impUid = cancelRequest.getImpUid();
+		String reason = cancelRequest.getReason() != null
+			? cancelRequest.getReason()
+			: "사용자에 의한 요청 취소";
+
+		log.info("취소 요청: impUid={}, reason={}", impUid, reason);
 
 		return newPaymentService.cancelPayment(impUid, reason)
-			.map(isSuccess -> {
-				if (isSuccess) {
-					return ResponseEntity.status(HttpStatus.OK).body("결제 취소 성공");
+			.map(result -> {
+				if (result) {
+					return ResponseEntity.ok("결제 취소 성공");
 				} else {
 					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("결제 취소 실패");
 				}
