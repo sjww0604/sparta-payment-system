@@ -66,11 +66,20 @@ public class GlobalExceptionHandler {
 	 * 로그인 시 패스워드가 틀린경우
 	 */
 	@ExceptionHandler (InvalidatePasswordException.class)
-	public ResponseEntity<ErrorResponse> handleUserDomainErrors(InvalidatePasswordException ex) {
+	public ResponseEntity<ErrorResponse> handleLoginErrors(InvalidatePasswordException ex) {
 
 		ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
 		return ResponseEntity.status(BAD_REQUEST).body(errorResponse);
 	}
 
+    /**
+     * 도메인 정책 위반 - 주문수량은 재고수량을 넘어갈수 없음
+     */
+    @ExceptionHandler (InvalidProductQuantityException.class)
+    public ResponseEntity<ErrorResponse> handleOrderDomainErrors(InvalidProductQuantityException ex) {
 
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
+        return ResponseEntity.status(BAD_REQUEST).body(errorResponse);
+    }
+    
 }
