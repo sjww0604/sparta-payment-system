@@ -5,6 +5,9 @@ import com.sparta.payment_system.dto.auth.CreateUserResponse;
 import com.sparta.payment_system.dto.auth.PostLoginRequest;
 import com.sparta.payment_system.dto.auth.PostLoginResponse;
 import com.sparta.payment_system.entity.User;
+import com.sparta.payment_system.exception.EmailAlreadyExistException;
+import com.sparta.payment_system.exception.InvalidatePasswordException;
+import com.sparta.payment_system.exception.NotFoundException;
 import com.sparta.payment_system.global.jwt.JwtUtils;
 import com.sparta.payment_system.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +25,7 @@ public class AuthService {
     // 회원가입 -> Bcrypt 사용안함
     public CreateUserResponse createUser(CreateUserRequest createUserRequest) {
         if(userRepository.existsByEmail(createUserRequest.getEmail())){
-            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+            throw new EmailAlreadyExistException("이미 사용 중인 이메일입니다.");
         }
 
         User user = new  User(
@@ -47,10 +50,10 @@ public class AuthService {
     public PostLoginResponse userLogin(PostLoginRequest postLoginRequest) {
 
         User user = userRepository.findByEmail(postLoginRequest.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 이메일입니다."));
 
         if(!passwordEncoder.matches(postLoginRequest.getPassword(), user.getPasswordHash())){
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new InvalidatePasswordException("비밀번호가 일치하지 않습니다.");
         }
 
         String accessToken = jwtUtils.createAccessToken(
