@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-      - develop
+      - Develop
   pull_request:
     branches:
       - main
-      - develop
+      - Develop
 
 env:
   DOCKER_IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/payment-security
