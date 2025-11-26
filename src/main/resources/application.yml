@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: ${SPRING_APPLICATION_NAME:sparta-payment-system}
+
+  # mysql setting
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/mydb}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:com.mysql.cj.jdbc.Driver}
+
+  # JPA/Hibernate setting
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:create}
+    show-sql: ${SPRING_JPA_SHOW_SQL:true}
+    properties:
+      hibernate:
+        format_sql: ${SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL:true}
+        dialect: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:org.hibernate.dialect.MySQLDialect}
+
+# PortOne API Configuration
+portone:
+  api:
+    secret: ${PORTONE_API_SECRET:}
+    url: ${PORTONE_API_URL:https://api.portone.io/}
+
+  # KG inicis with portone
+  store:
+    id: ${PORTONE_STORE_ID:}
+
+  channel:
+    key: ${PORTONE_CHANNEL_KEY:}
+
+  pg:
+    mid: ${PORTONE_PG_MID:INIpayTest}
+
+  web:
+    signkey: ${PORTONE_WEB_SIGNKEY:}
+
+  ini:
+    api:
+      key: ${PORTONE_INI_API_KEY:}
+      iv: ${PORTONE_INI_API_IV:}
+
+  webhook:
+    secret: ${PORTONE_WEBHOOK_SECRET:}
+
+# Jwt token secret
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
+  refresh-token-expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
