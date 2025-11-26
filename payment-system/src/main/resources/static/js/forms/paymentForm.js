@@ -31,7 +31,7 @@ applyOrderBtn.addEventListener('click', async function () {
 
         const data = await orderResponse.json();
 
-        if(orderResponse.status === 401) {
+        if (orderResponse.status === 401) {
             const msg = data.message
             alert(msg);
             return;
@@ -110,7 +110,7 @@ getPaymentsBtn.addEventListener('click', async function () {
             return;
         }
 
-        alert("결제 리스트가  조회됨");
+        alert("결제 리스트가 조회됨");
 
     } catch (e) {
         console.error(e);
@@ -172,7 +172,6 @@ paymentBtn.addEventListener('click', async function (e) {
     alert('결제 금액: ' + final.toLocaleString() + '원\n결제를 진행합니다.');
     // alert 확인 버튼을 누른 후에 바로 실행되는 코드
 
-    //
     // console.log(STORE_ID, CHANNEL_KEY, USER_ID, PAYMENT_ID);
     const redirectUrl = window.location.origin + window.location.pathname;
 
