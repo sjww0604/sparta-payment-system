@@ -1,7 +1,6 @@
 package com.sparta.payment_system.dto.payment;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 import com.sparta.payment_system.entity.PaymentStatus;
 
@@ -16,7 +15,6 @@ public class GetPaidPaymentListResponse {
 	private String impUid;
 	private BigDecimal paymentAmount;
 	private String paymentMethod;
-
 	private PaymentStatus paymentStatus;
 
 	private boolean canRefund;
