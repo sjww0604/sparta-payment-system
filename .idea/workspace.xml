@@ -5,52 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b12afa6f-9dbc-402a-a5e4-c62ab19dc7df" name="Changes" comment="feat : cd 구현으로 인한 commit 진행">
-      <change afterPath="$PROJECT_DIR$/payment-system/appspec.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system/src/main/resources/static/payment-test.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system/src/main/resources/static/point-system/docs/00-dbdiagram.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system/src/main/resources/static/point-system/docs/01-point-payment-flow-design.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system/src/main/resources/static/point-system/docs/02-api-endpoints.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system/src/main/resources/static/point-system/docs/03-point-payment-implementation.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system/src/main/resources/static/point-system/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system/src/main/resources/static/point-system/point-payment.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system/src/main/resources/static/point-system/register.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system/src/main/resources/static/stock-management.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system/src/main/resources/static/subscription-system/docs/00-dbdiagram.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system/src/main/resources/static/subscription-system/docs/01-subscription-flow-design.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system/src/main/resources/static/subscription-system/docs/02-api-endpoints.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-system/src/main/resources/static/subscription-system/subscription.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/controller/DatabaseTestController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/controller/PaymentController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/service/PaymentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/ci.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ERD.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/https-certificate/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/naver-checkstyle-rules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/naver-intellij-formatter.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment-system-flowchart.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/PaymentSystemApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/PaymentSystemApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/client/PortOneClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/client/PortOneClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/controller/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/dto/payment/PaymentRequestDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/entity/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/entity/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/entity/OrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/entity/OrderItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/entity/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/entity/Payment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/entity/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/entity/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/entity/Refund.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/entity/Refund.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/repository/OrderItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/repository/OrderItemRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/repository/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/repository/OrderRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/repository/PaymentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/repository/PaymentRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/repository/ProductRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/repository/RefundRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/repository/RefundRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sparta/payment_system/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/포인트결제시스템프로젝트.pptx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,7 +90,7 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.PaymentSystemApplication.executor": "Run",
-    "git-widget-placeholder": "#21 on Merging Develop",
+    "git-widget-placeholder": "#22 on feat/cicd",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/sjww03/Documents/GitHub/sparta-payment-system",
     "node.js.detected.package.eslint": "true",
@@ -215,7 +170,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764152244293</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="feat : cd 구현으로 인한 commit 진행">
+      <option name="closed" value="true" />
+      <created>1764160255845</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1764160255845</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
