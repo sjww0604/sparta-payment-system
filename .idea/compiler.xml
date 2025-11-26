@@ -11,12 +11,9 @@
         <module name="payment-system.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel target="17" />
   </component>
   <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="payment-system" options="-parameters" />
-      <module name="payment-system.main" options="-parameters" />
-      <module name="payment-system.test" options="-parameters" />
-    </option>
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-parameters" />
   </component>
 </project>
