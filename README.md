@@ -174,15 +174,15 @@ SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/mydb
 SPRING_DATASOURCE_USERNAME=your_username
 SPRING_DATASOURCE_PASSWORD=your_password
 SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
-SPRING_JPA_HIBERNATE_DDL_AUTO=create  # 또는 update, validate
+SPRING_JPA_HIBERNATE_DDL_AUTO=create
 ```
 
 #### JWT 설정
 
 ```bash
 JWT_SECRET=your_jwt_secret_key
-JWT_ACCESS_TOKEN_EXPIRATION=3600000  # 1시간 (밀리초)
-JWT_REFRESH_TOKEN_EXPIRATION=604800000  # 7일 (밀리초)
+JWT_ACCESS_TOKEN_EXPIRATION=3600000  # 1시간
+JWT_REFRESH_TOKEN_EXPIRATION=604800000  # 7일
 ```
 
 #### PortOne API 설정
@@ -197,89 +197,6 @@ PORTONE_WEB_SIGNKEY=your_web_signkey
 PORTONE_INI_API_KEY=your_ini_api_key
 PORTONE_INI_API_IV=your_ini_api_iv
 PORTONE_WEBHOOK_SECRET=your_webhook_secret
-```
-
----
-
-## 💻 로컬 개발 환경 설정
-
-### 1. 사전 요구사항
-
-- Java 17 이상
-- MySQL 8.0
-- Gradle (또는 Gradle Wrapper 사용)
-
-### 2. 데이터베이스 설정
-
-```sql
-CREATE DATABASE mydb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-### 3. 환경 변수 설정
-
-`.env` 파일을 생성하거나 시스템 환경 변수로 설정:
-
-```bash
-export SPRING_DATASOURCE_USERNAME=root
-export SPRING_DATASOURCE_PASSWORD=your_password
-export JWT_SECRET=your_secret_key
-# ... 기타 환경 변수
-```
-
-### 4. 애플리케이션 실행
-
-```bash
-# Gradle Wrapper 사용
-./gradlew bootRun
-
-# 또는 빌드 후 실행
-./gradlew build
-java -jar build/libs/payment-system-0.0.1-SNAPSHOT.jar
-```
-
-애플리케이션은 기본적으로 `http://localhost:8080`에서 실행됩니다.
-
----
-
-## 🐳 Docker를 사용한 실행
-
-### 1. Docker 이미지 빌드
-
-```bash
-docker build -t payment-system:latest .
-```
-
-### 2. Docker Compose 사용 (권장)
-
-`docker-compose.yml` 파일을 생성하여 MySQL과 함께 실행:
-
-```yaml
-version: "3.8"
-services:
-  mysql:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: mydb
-    ports:
-      - "3306:3306"
-
-  app:
-    build: .
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mydb
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: rootpassword
-    depends_on:
-      - mysql
-```
-
-### 3. 컨테이너 실행
-
-```bash
-docker-compose up -d
 ```
 
 ---
@@ -301,16 +218,6 @@ docker-compose up -d
 - Docker 컨테이너 기반 배포
 - 무중단 배포 지원
 
-### 배포 프로세스
-
-1. 코드 푸시 → GitHub Actions 트리거
-2. 빌드 및 테스트 실행
-3. Docker 이미지 빌드 및 푸시
-4. EC2 서버에 SSH 접속
-5. 기존 컨테이너 중지 및 제거
-6. 최신 이미지 Pull 및 실행
-7. 헬스 체크 및 검증
-
 ---
 
 ## 📊 데이터베이스 스키마
@@ -327,16 +234,6 @@ docker-compose up -d
 - **Product**: 상품 정보 (가격, 재고)
 
 자세한 ERD는 프로젝트 루트의 `ERD.png` 파일을 참조하세요.
-
----
-
-## 🔐 보안 기능
-
-- **JWT 인증**: Access Token과 Refresh Token을 통한 인증
-- **Spring Security**: 엔드포인트별 인증/인가 설정
-- **비밀번호 해싱**: BCrypt를 통한 비밀번호 암호화
-- **CORS 설정**: Cross-Origin 요청 처리
-- **예외 처리**: 전역 예외 핸들러를 통한 일관된 에러 응답
 
 ---
 
@@ -382,45 +279,3 @@ docker-compose up -d
 5. 환불 이력 기록
 
 ---
-
-## 🚨 예외 처리
-
-프로젝트는 커스텀 예외를 통해 비즈니스 로직 오류를 처리합니다:
-
-- `EmailAlreadyExistException`: 중복 이메일
-- `InvalidatePasswordException`: 잘못된 비밀번호
-- `InvalidProductQuantityException`: 재고 부족
-- `NotFoundException`: 리소스 없음
-- `UnauthorizedActionException`: 권한 없음
-
-모든 예외는 `GlobalExceptionHandler`를 통해 일관된 형식으로 응답됩니다.
-
----
-
-## 📚 추가 문서
-
-- `docs/curl-examples.md`: API 테스트용 curl 명령어 예시
-- `docs/dbdiagram.md`: 데이터베이스 다이어그램
-- `docs/images/payment_flow.png`: 결제 플로우 차트
-
----
-
-## 🤝 기여 가이드
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📄 라이선스
-
-이 프로젝트는 교육 목적으로 제작되었습니다.
-
----
-
-## 👥 개발자
-
-Sparta Payment System Team
